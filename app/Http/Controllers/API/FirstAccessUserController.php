@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\FirstAccess\AccessRequest;
+
+class FirstAccessUserController extends Controller
+{
+    public function firstAccess(AccessRequest $request)
+    {
+        $user = Auth::user();
+        if (!$user->email_verified_at) {
+            if (!$request->has('errors')) {
+                $validated = $request->validated();
+                DB::beginTransaction();
+                try {
+                    $user->password = $validated['password'];
+                    $user->email_verified_at = now();
+                    $user->save();
+                    DB::commit();
+                    return response()->json(['message' => 'Datos verificados correctamente'], 200);
+                } catch (\Exception $e) {
+                    return response()->json(['message' => $e->getMessage()], 500);
+                }
+            } else {
+                return response()->json($request->validated(), 422);
+            }
+        } else {
+            return response()->json(['message' => 'El usuario ya ha sido validado'], 200);
+        }
+    }
+}
