@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Sensor;
+namespace App\Http\Requests\noticias;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SensorDataRequest extends FormRequest
+class NoticiasRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class SensorDataRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,9 +24,11 @@ class SensorDataRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:sensors,id',
-            'start_time' => 'nullable|date_format:Y-m-d H:i:s',
-            'end_time' => 'nullable|date_format:Y-m-d H:i:s|after_or_equal:start_time',
+            'titulo' => 'required',
+            'contenido' => 'required',
+            'imagen' => 'required',
+            'endpoint' => 'required',
+            'id_seccion' => 'required|exists:secciones,id'
         ];
     }
 
@@ -35,7 +37,7 @@ class SensorDataRequest extends FormRequest
      * de validación correspondientes
      * 
      * @return response
-    */
+     */
     public function response(array $errors) 
     {
         return response()->json($errors, 422);
