@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\user;
+namespace App\Http\Requests\secciones;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
-class UserRequest extends FormRequest
+class SeccionesUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +23,8 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-
-        $user = Auth::user();
-
         return [
-            'name' => 'required|max:55',
-            'email' => 'email|unique:users,email,'.$user->id,
-            'password' => 'required|confirmed'
+            'imagen' => 'max:10000|mimes:jpeg,png'
         ];
     }
 
@@ -44,5 +38,4 @@ class UserRequest extends FormRequest
     {
         return response()->json($errors, 422);
     }
-    
 }

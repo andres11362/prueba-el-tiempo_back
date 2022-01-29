@@ -73,7 +73,7 @@ class AuthController extends Controller
             $token->delete();
         });
         $user->save();
-        return response()->json('Sesion cerrada correctamente', 200);
+        return response()->json(['estado' => 'logout', 'message' => 'Sesion cerrada correctamente'], 200);
     }
 
     /**
@@ -83,7 +83,22 @@ class AuthController extends Controller
      */
     public function user()
     {
-        return Auth::user();
+       return Auth::user();
+    }
+
+    /**
+     * Retorna el usuario autenticado
+     * 
+     * @return user
+     */
+    public function userWithNews()
+    {
+
+        $id = Auth::user()->id;
+
+        $user = User::getUserWithNews($id)->get();
+
+        return $user;
     }
 
     /**

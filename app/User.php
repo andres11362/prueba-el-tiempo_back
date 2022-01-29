@@ -64,7 +64,18 @@ class User extends Authenticatable
      */
     public function noticias()
     {
-        return $this->hasMany(Noticia::class);
+        return $this->hasMany(Noticia::class, 'id_usuario');
+    }
+
+    /**
+     * Función para obtener datos del usuario 
+     * con sus noticias relacionadas
+     */
+    public function scopeGetUserWithNews($query, $id) 
+    {
+        $user = $query->where('id', $id)->with('noticias');
+        
+        return $user;
     }
 
 }

@@ -53,12 +53,14 @@ Route::middleware(['auth:api'])->group(function () {
      * 3. Primer acceso a la plataforma.
      * 4. Editar usuario.
      * 5. Salida de la plataforma
+     * 6. Un usuario en especifico con la lista de sus noticias
      */
     Route::get('users', 'API\UserController@index')->name('user-all');
     Route::get('user', 'API\AuthController@user')->name('user');
     Route::post('first-access-user', 'API\FirstAccessUserController@firstAccess')->name('first-access-user');
     Route::put('edit-user', 'API\UserController@update')->name('edit-user');
     Route::post('logout','API\AuthController@logout')->name('logout');
+    Route::get('user-news', 'API\AuthController@userWithNews')->name('user-news');
 
     /**
      * Rutas de las secciones

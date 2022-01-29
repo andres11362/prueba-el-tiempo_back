@@ -25,7 +25,7 @@ class SeccionesRequest extends FormRequest
     {
         return [
             'nombre' => 'required',
-            'imagen' => 'required'
+            'imagen' => 'max:10000|mimes:jpeg,png'
         ];
     }
 
