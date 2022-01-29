@@ -9,6 +9,12 @@ use App\Http\Requests\FirstAccess\AccessRequest;
 
 class FirstAccessUserController extends Controller
 {
+    /**
+     * Metodo para validar si un usuario ha accedido por primera vez
+     * En el front end se pedira un cambio de contraseña
+     * Y se habilitara el acceso a la pagina
+     * @return response
+     */
     public function firstAccess(AccessRequest $request)
     {
         $user = Auth::user();

@@ -11,17 +11,26 @@ use App\Http\Requests\user\UserRequest;
 
 class UserController extends Controller
 {
-
+    /**
+     * Se listan todos los usuarios autorizados al sistema
+     * Se restringen algunos campos por motivos de seguridad
+     * 
+     * @return response
+     */
     public function index()
     {
-        $users = User::all();
+        $users = User::paginate(15);
 
         $users->makeHidden(['email_verified_at', 'created_at', 'updated_at']);
 
         return response()->json(['users' => $users], 200);
     }
 
-
+    /**
+     * Metodo para que el usuario pueda actualizar sus datos
+     * 
+     * @return response
+    */
     public function update(UserRequest $request)
     {
         $user = Auth::user();

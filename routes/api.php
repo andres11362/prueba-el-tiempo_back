@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', 'API\AuthController@register')->name('register');
 Route::post('login', 'API\AuthController@login')->name('login');
 Route::post('forgot', 'API\ForgotController@forgot')->name('forgot');
-Route::post('reset', 'API\ForgotController@reset')->name('reset');
+Route::put('reset', 'API\ForgotController@reset')->name('reset');
 
 /**
  * Rutas no protegidas noticias
@@ -35,9 +35,9 @@ Route::post('reset', 'API\ForgotController@reset')->name('reset');
  * 4. Noticia por id
  */
 Route::get('noticias/lista', 'API\SectionPublicController@index')->name('public-notices');
-Route::get('noticias/seccion/{seccion}', 'API\SectionPublicController@noticiasPorSeccion')->name('notices-section');
-Route::get('noticias/autor/{autor}', 'API\SectionPublicController@noticiasPorAutor')->name('notices-author');
-Route::get('noticia/{id}', 'API\SectionPublicController@noticiasPorAutor')->name('notices-author');
+Route::get('noticias/seccion/{id}', 'API\SectionPublicController@noticiasPorSeccion')->name('notices-section');
+Route::get('noticias/autor/{autor}', 'API\SectionPublicController@noticiasPorUsuario')->name('notices-author');
+Route::get('noticia/{id}', 'API\SectionPublicController@show')->name('notices-show');
 
 /**
  * Rutas protegidas

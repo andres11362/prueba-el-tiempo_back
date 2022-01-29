@@ -14,7 +14,7 @@ class CreateForeignKeysTable extends Migration
     public function up()
     {
         Schema::table('noticias', function (Blueprint $table) {
-            $table->foreign('id_usuario')->references('id')->on('id_usuario');
+            $table->foreign('id_usuario')->references('id')->on('users');
         });
 
         Schema::table('noticias', function (Blueprint $table) {
