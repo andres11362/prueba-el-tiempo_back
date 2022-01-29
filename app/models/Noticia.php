@@ -2,16 +2,18 @@
 
 namespace App\models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class Noticia extends Model
 {
     /**
-     * The attributes that are mass assignable.
+     * Los atributos definidos para ser manipulados en masa
      *
      * @var array
      */
-    protected $fillable = [ 'titulo', 'contenido', 'imagen',  'endpoint', 'id_seccion', 'id_autor' ];
+    protected $fillable = [ 'titulo', 'contenido', 'imagen',  'endpoint', 'id_seccion', 'id_usuario' ];
 
     /**
      * Se define el nombre de la tabla en DB 
@@ -21,12 +23,12 @@ class Noticia extends Model
     protected $table = 'noticias';
 
     /**
-     * Relacion entre una noticia y un autor
-     * Una noticia puede tener un solo autor
+     * Relacion entre una noticia y un usuario
+     * Una noticia puede tener un solo usuario
      */
-    public function autor()
+    public function usuario()
     {
-        return $this->belongsTo(Autor::class);
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -36,6 +38,30 @@ class Noticia extends Model
     public function seccion()
     {
         return $this->belongsTo(Seccion::class);
+    }
+    
+    /**
+     * Obtenemos las noticias por autor
+     * @return mixed
+    */
+    public function scopeGetNoticiasUsuario($query, $id)
+    {
+        $noticias = $query->where('id_usuario', $id);
+        $noticias->with('usuario');
+
+        return $noticias;
+    }
+
+    /**
+     * Obtenemos las noticias por seccion
+     * @return mixed
+    */
+    public function scopeGetNoticiasSeccion($query, $id)
+    {
+        $noticias = $query->where('id_usuario', $id);
+        $noticias->with('seccion');
+
+        return $noticias;
     }
 
 }

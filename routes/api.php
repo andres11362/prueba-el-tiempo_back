@@ -28,6 +28,18 @@ Route::post('forgot', 'API\ForgotController@forgot')->name('forgot');
 Route::post('reset', 'API\ForgotController@reset')->name('reset');
 
 /**
+ * Rutas no protegidas noticias
+ * 1. Lista de todas las noticias
+ * 2. Lista de noticias por sección
+ * 3. Lista de rutas por autor
+ * 4. Noticia por id
+ */
+Route::get('noticias/lista', 'API\SectionPublicController@index')->name('public-notices');
+Route::get('noticias/seccion/{seccion}', 'API\SectionPublicController@noticiasPorSeccion')->name('notices-section');
+Route::get('noticias/autor/{autor}', 'API\SectionPublicController@noticiasPorAutor')->name('notices-author');
+Route::get('noticia/{id}', 'API\SectionPublicController@noticiasPorAutor')->name('notices-author');
+
+/**
  * Rutas protegidas
  * Las siguientes rutas no podran ser accedidas 
  * a menos de que el usuario este registrado y autenticado en
@@ -49,34 +61,21 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('logout','API\AuthController@logout')->name('logout');
 
     /**
-     * Rutas de los tipo de medicion
+     * Rutas de las secciones
      * Se excluyen la creacion y la edicion al ser consumidas 
      * por medio de un API
      */
-    Route::resource('type-medition', 'API\TypeMeditionController')->except([
+    Route::resource('secciones', 'API\SeccionesController')->except([
         'create', 'edit'
     ]);
     
     /**
-     * Rutas de los sensores
+     * Rutas de noticias
      * Se excluyen la creacion y la edicion al ser consumidas 
      * por medio de un API
      */
-    Route::resource('sensor', 'API\SensorController')->except([
+    Route::resource('noticias', 'API\NoticiasController')->except([
         'create', 'edit'
     ]);
 
-    /**
-     * Rutas especificas para las mediciones
-     * 1. Ultima medicion de un sensor en especifico
-     * 2. Data completa de un sensor en especifico (Caso PDF)
-     * 3. Todas las mediciones.
-     * 4. Buscar una medicion por tiempo.
-     * 5. Creacion de una medicion (Solo usar para el sensor)
-     */
-    Route::get('sensor-medition-last/{id}', 'API\SensorController@lastMedition')->name('medition-last');
-    Route::post('sensor-full-data', 'API\SensorController@sensorFullData')->name('sensor-full-data');
-    Route::get('medition', 'API\MeditionController@all')->name('medition-all');
-    Route::get('medition-sensor/{time}', 'API\MeditionController@show')->name('medition-sensor');
-    Route::post('medition-create', 'API\MeditionController@store')->name('medition-store');
 });

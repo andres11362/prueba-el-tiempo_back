@@ -3,6 +3,7 @@
 namespace App;
 
 use App\models\Autor;
+use App\models\Noticia;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -59,11 +60,11 @@ class User extends Authenticatable
 
 
     /**
-     * Se establece la relacion uno a uno con los autores
+     * Se establece la relacion uno a uno con las noticias
      */
-    public function Autor()
+    public function noticias()
     {
-        return $this->hasOne(Autor::class);
+        return $this->hasMany(Noticia::class);
     }
 
 }
