@@ -13,7 +13,7 @@ class Noticia extends Model
      *
      * @var array
      */
-    protected $fillable = [ 'titulo', 'contenido', 'imagen',  'endpoint', 'id_seccion', 'id_usuario' ];
+    protected $fillable = [ 'titulo', 'contenido', 'imagen', 'id_seccion', 'id_usuario' ];
 
     /**
      * Se define el nombre de la tabla en DB 

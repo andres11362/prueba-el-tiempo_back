@@ -68,8 +68,13 @@ Route::middleware(['auth:api'])->group(function () {
      * por medio de un API
      */
     Route::resource('secciones', 'API\SeccionesController')->except([
-        'create', 'edit'
+        'create', 'edit', 'update'
     ]);
+    /**
+     * Laravel no acepta metodos put o patch para form-data por eso
+     * se considera dejar la ruta en de actualizacion en el metodo POST
+     */
+    Route::post('secciones/{id}', 'API\SeccionesController@update')->name('update-seccion');
     
     /**
      * Rutas de noticias
@@ -77,7 +82,12 @@ Route::middleware(['auth:api'])->group(function () {
      * por medio de un API
      */
     Route::resource('noticias', 'API\NoticiasController')->except([
-        'create', 'edit'
+        'create', 'edit', 'update'
     ]);
+    /**
+     * Laravel no acepta metodos put o patch para form-data por eso
+     * se considera dejar la ruta en de actualizacion en el metodo POST
+     */
+    Route::post('noticias/{id}', 'API\NoticiasController@update')->name('update-seccion');
 
 });

@@ -18,7 +18,6 @@ class CreateNoticiasTable extends Migration
             $table->string('titulo');
             $table->text('contenido');
             $table->text('imagen');
-            $table->string('endpoint');
             $table->unsignedBigInteger('id_usuario');
             $table->unsignedBigInteger('id_seccion');
             $table->timestamps();

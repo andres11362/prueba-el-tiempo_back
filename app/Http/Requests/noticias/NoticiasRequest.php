@@ -13,7 +13,7 @@ class NoticiasRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,8 +26,7 @@ class NoticiasRequest extends FormRequest
         return [
             'titulo' => 'required',
             'contenido' => 'required',
-            'imagen' => 'required',
-            'endpoint' => 'required',
+            'imagen' => 'required|max:10000|mimes:jpeg,png',
             'id_seccion' => 'required|exists:secciones,id'
         ];
     }

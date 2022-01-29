@@ -15,8 +15,7 @@ $factory->define(Noticia::class, function (Faker $faker) {
     return [
         'titulo' => $faker->title(), 
         'contenido' => $faker->text(300), 
-        'imagen'  => 'https://i.blogs.es/a19bfc/testing/450_1000.jpg',
-        'endpoint' => 'abc123', 
+        'imagen'  => 'https://i.blogs.es/a19bfc/testing/450_1000.jpg', 
         'id_usuario' => $faker->randomElement($users), 
         'id_seccion' => $faker->randomElement($secciones)
     ];

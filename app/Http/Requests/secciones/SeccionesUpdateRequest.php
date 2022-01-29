@@ -24,7 +24,8 @@ class SeccionesUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'imagen' => 'max:10000|mimes:jpeg,png'
+            'nombre' => 'nullable',
+            'imagen' => 'nullable:max:10000|mimes:jpeg,png'
         ];
     }
 
