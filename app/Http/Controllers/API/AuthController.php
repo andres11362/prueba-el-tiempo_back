@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\HeaderTables;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\auth\RegisterRequest;
 use App\Http\Requests\auth\LoginRequest;
@@ -32,8 +33,8 @@ class AuthController extends Controller
             $data = $this->getEmailData($user, $pwd);
             Mail::to($request->email)->send(new RegisterUser($data));
             DB::commit();
-            return response()->json([ 'estado' => 'OK', 'message' => '¡Usuario creado correctamente!'], 200);
-        }   catch (\Exception $e) {
+            return response()->json(['estado' => 'OK', 'message' => '¡Usuario creado correctamente!'], 200);
+        } catch (\Exception $e) {
             DB::rollback();
             return response(['message' => $e->getMessage()]);
         }
@@ -46,7 +47,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        if(!$request->has('errors')) {
+        if (!$request->has('errors')) {
             try {
                 if (!auth()->attempt($request->validated())) {
                     return response()->json(['error' => 1, 'message' => 'Credenciales invalidas'], 401);
@@ -69,7 +70,7 @@ class AuthController extends Controller
     public function logout()
     {
         $user = auth()->user();
-        $user->tokens->each(function($token, $key) {
+        $user->tokens->each(function ($token, $key) {
             $token->delete();
         });
         $user->save();
@@ -83,7 +84,7 @@ class AuthController extends Controller
      */
     public function user()
     {
-       return Auth::user();
+        return Auth::user();
     }
 
     /**
@@ -93,12 +94,21 @@ class AuthController extends Controller
      */
     public function userWithNews()
     {
+        try {
+            $id = Auth::user()->id;
 
-        $id = Auth::user()->id;
+            $user = User::findOrFail($id);
 
-        $user = User::getUserWithNews($id)->get();
+            $news = $user->noticias()->paginate(10);
 
-        return $user;
+            $headers = new HeaderTables('noticias');
+
+            $list_header = $headers->getTableColumns();
+
+            return response()->json(['headers' => $list_header, 'user' => $user, 'news' => $news], 200);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 500);
+        }
     }
 
     /**
@@ -106,7 +116,7 @@ class AuthController extends Controller
      * 
      * @return object
      */
-    private function getEmailData($user, $pwd) 
+    private function getEmailData($user, $pwd)
     {
         $data = new stdClass;
         $data->user = $user->email;

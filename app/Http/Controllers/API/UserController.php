@@ -46,7 +46,9 @@ class UserController extends Controller
                 $validated = $request->validated();
                 $user->name = $validated['name'] ? $validated['name'] : $user->name;
                 $user->email = $validated['email'] ? $validated['email'] : $user->email;
-                $user->password = $validated['password'] ? $validated['password'] : $user->password;
+                if ($validated['password']) {
+                    $user->password = $validated['password'];
+                }
                 $user->save();
                 DB::commit();
                 return response()->json(['message' => 'Datos actualizados correctamente'], 200);
