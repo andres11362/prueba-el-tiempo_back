@@ -28,6 +28,7 @@ class Seccion extends Model
     {
         return $this->hasMany(Noticia::class);
     }
+
 }
 
 

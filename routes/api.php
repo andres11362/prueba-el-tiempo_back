@@ -75,6 +75,12 @@ Route::middleware(['auth:api'])->group(function () {
      * se considera dejar la ruta en de actualizacion en el metodo POST
      */
     Route::post('secciones/{id}', 'API\SeccionesController@update')->name('update-seccion');
+
+    /**
+     * obtiene todos las secciones con el scope
+     * de pluck (campos id y nombre)
+     */
+    Route::get('secciones-select', 'API\SeccionesController@pluckedData')->name('update-seccion');
     
     /**
      * Rutas de noticias

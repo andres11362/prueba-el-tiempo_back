@@ -28,11 +28,11 @@ class AuthController extends Controller
             $pwd = $this->generateRandomPassword();
             $validated['password'] = $pwd;
             $user = User::create($validated);
-            $accessToken = $user->createToken('authToken')->accessToken;
+            $user->createToken('authToken')->accessToken;
             $data = $this->getEmailData($user, $pwd);
             Mail::to($request->email)->send(new RegisterUser($data));
             DB::commit();
-            return response()->json([ 'user' => $user, 'access_token' => $accessToken, 'registro' => 'OK'], 200);
+            return response()->json([ 'estado' => 'OK', 'message' => '¡Usuario creado correctamente!'], 200);
         }   catch (\Exception $e) {
             DB::rollback();
             return response(['message' => $e->getMessage()]);

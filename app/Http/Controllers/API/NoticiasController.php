@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\HeaderTables;
 use App\Helpers\StorageFiles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Noticias\NoticiasRequest;
@@ -23,7 +24,11 @@ class NoticiasController extends Controller
     {
         $noticias = Noticia::paginate(10);
 
-        return response()->json($noticias, 200);
+        $headers = new HeaderTables('noticias');
+
+        $list_header = $headers->getTableColumns();
+
+        return response()->json(['headers' => $list_header, 'noticias' => $noticias], 200);
     }
 
     /**
@@ -172,14 +177,24 @@ class NoticiasController extends Controller
      */
     private function getBodySecciones($data, $path)
     {
-        $body = [
-            'titulo' => $data->title,
-            'contenido' => $data->contents,
-            'id_usuario' => Auth::user()->id,
-            'id_seccion' => $data->id_section,
-            'imagen' => $path
-        ];
-
+        if (is_array($data)) {
+            $body = [
+                'titulo' => $data['titulo'],
+                'contenido' => $data['contenido'],
+                'id_usuario' => Auth::user()->id,
+                'id_seccion' => $data['id_seccion'],
+                'imagen' => $path
+            ];
+        } else {
+            $body = [
+                'titulo' => $data->title,
+                'contenido' => $data->contents,
+                'id_usuario' => Auth::user()->id,
+                'id_seccion' => $data->id_section,
+                'imagen' => $path
+            ];
+        }
+        
         return $body;
     } 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\HeaderTables;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -19,11 +20,15 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(15);
+        $users = User::paginate(10);
 
-        $users->makeHidden(['email_verified_at', 'created_at', 'updated_at']);
+        $headers = new HeaderTables('users');
 
-        return response()->json(['users' => $users], 200);
+        $list_header = $headers->getTableColumns();
+
+        $users->makeHidden(['created_at', 'updated_at']);
+
+        return response()->json(['headers' => $list_header, 'users' => $users], 200);
     }
 
     /**

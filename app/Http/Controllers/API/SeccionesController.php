@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\HeaderTables;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\secciones\SeccionesRequest;
 use App\models\Seccion;
@@ -21,7 +22,11 @@ class SeccionesController extends Controller
     {
         $secciones = Seccion::paginate(5);
 
-        return response()->json(['secciones' => $secciones], 200);
+        $headers = new HeaderTables('secciones');
+
+        $list_header = $headers->getTableColumns();
+
+        return response()->json(['headers' => $list_header, 'secciones' => $secciones], 200);
     }
 
 
@@ -105,7 +110,7 @@ class SeccionesController extends Controller
     }
 
     /**
-    * Remueve una noticia seleccionada por el id
+     * Remueve una noticia seleccionada por el id
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -129,6 +134,21 @@ class SeccionesController extends Controller
             DB::rollback();
             return response(['message' => $e->getMessage()], 500);
         }
+    }
+
+    /**
+     * obtiene todos las secciones con el scope
+     * de pluck (campos id y nombre)
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function pluckedData()
+    {
+        $secciones = Seccion::all();
+
+        $plucked = $secciones->pluck('nombre', 'id');
+
+        return $plucked->all();
     }
 
     /**
