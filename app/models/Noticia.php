@@ -48,6 +48,7 @@ class Noticia extends Model
     {
         $noticias = $query->where('id_usuario', $id);
         $noticias->with('usuario');
+        $noticias->with('seccion');
 
         return $noticias;
     }
@@ -60,6 +61,7 @@ class Noticia extends Model
     {
         $noticias = $query->where('id_seccion', $id);
         $noticias->with('seccion');
+        $noticias->with('usuario');
 
         return $noticias;
     }

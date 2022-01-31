@@ -21,6 +21,8 @@ class HeaderTables {
         'password',
         'id_usuario',
         'id_seccion',
+        'email_verified_at',
+        'is_super_user'
     ];
 
     /**
@@ -42,7 +44,9 @@ class HeaderTables {
 ;
         $filter = array_diff($temp_headers, $this->black_list);
 
-        array_push($filter, 'acciones');
+        if($this->table !== 'users') {
+            array_push($filter, 'acciones');
+        }
 
         return $filter;
     }
