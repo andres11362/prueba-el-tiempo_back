@@ -13,7 +13,7 @@ class Noticia extends Model
      *
      * @var array
      */
-    protected $fillable = [ 'titulo', 'contenido', 'imagen',  'endpoint', 'id_seccion', 'id_usuario' ];
+    protected $fillable = [ 'titulo', 'contenido', 'imagen', 'id_seccion', 'id_usuario' ];
 
     /**
      * Se define el nombre de la tabla en DB 
@@ -28,7 +28,7 @@ class Noticia extends Model
      */
     public function usuario()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'id_usuario');
     }
 
     /**
@@ -37,7 +37,7 @@ class Noticia extends Model
      */
     public function seccion()
     {
-        return $this->belongsTo(Seccion::class);
+        return $this->belongsTo(Seccion::class, 'id_seccion');
     }
     
     /**
@@ -48,6 +48,7 @@ class Noticia extends Model
     {
         $noticias = $query->where('id_usuario', $id);
         $noticias->with('usuario');
+        $noticias->with('seccion');
 
         return $noticias;
     }
@@ -58,10 +59,36 @@ class Noticia extends Model
     */
     public function scopeGetNoticiasSeccion($query, $id)
     {
-        $noticias = $query->where('id_usuario', $id);
+        $noticias = $query->where('id_seccion', $id);
         $noticias->with('seccion');
+        $noticias->with('usuario');
 
         return $noticias;
     }
 
+    /**
+     * Obtenemos los datos de las noticias y sus relaciones
+     * Incluida paginacion
+     */
+    public function scopeGetNoticias($query)
+    {
+        $query->with('seccion');
+        $query->with('usuario');
+
+        return $query;
+    }
+
+    /**
+     * Obtenemos los datos de una noticia y sus relaciones
+     * Incluida paginacion
+     */
+    public function scopeGetNoticia($query, $id)
+    {
+
+        $noticia = $query->where('id', $id);
+        $noticia->with('seccion');
+        $noticia->with('usuario');
+
+        return $noticia;
+    }
 }

@@ -34,7 +34,7 @@ class ForgotController extends Controller
                 $data = $this->getEmailData($validated['email'], $token);
                 Mail::to($validated['email'])->send(new ForgotPassword($data));
                 DB::commit();
-                return response()->json(['message' => 'Revisa tu correo electronico para hacer el cambio de contraseña'], 200);
+                return response()->json(['message' => 'Revisa tu correo electrónico para hacer el cambio de contraseña'], 200);
             } catch (\Exception $e) {
                 DB::rollback();
                 return response()->json([ 'message' => $e->getMessage() ], 500);

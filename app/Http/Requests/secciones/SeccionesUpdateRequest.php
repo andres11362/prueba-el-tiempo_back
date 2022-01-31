@@ -4,7 +4,7 @@ namespace App\Http\Requests\secciones;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SeccionesRequest extends FormRequest
+class SeccionesUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,8 @@ class SeccionesRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre' => 'required',
-            'imagen' => 'required|max:10000|mimes:jpeg,png'
+            'nombre' => 'nullable',
+            'imagen' => 'nullable:max:10000|mimes:jpeg,png'
         ];
     }
 
@@ -39,6 +39,4 @@ class SeccionesRequest extends FormRequest
     {
         return response()->json($errors, 422);
     }
-
-    
 }

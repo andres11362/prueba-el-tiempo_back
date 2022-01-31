@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\HeaderTables;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -11,17 +12,30 @@ use App\Http\Requests\user\UserRequest;
 
 class UserController extends Controller
 {
-
+    /**
+     * Se listan todos los usuarios autorizados al sistema
+     * Se restringen algunos campos por motivos de seguridad
+     * 
+     * @return response
+     */
     public function index()
     {
-        $users = User::all();
+        $users = User::paginate(10);
 
-        $users->makeHidden(['email_verified_at', 'created_at', 'updated_at']);
+        $headers = new HeaderTables('users');
 
-        return response()->json(['users' => $users], 200);
+        $list_header = $headers->getTableColumns();
+
+        $users->makeHidden(['created_at', 'updated_at']);
+
+        return response()->json(['headers' => $list_header, 'users' => $users], 200);
     }
 
-
+    /**
+     * Metodo para que el usuario pueda actualizar sus datos
+     * 
+     * @return response
+    */
     public function update(UserRequest $request)
     {
         $user = Auth::user();
@@ -32,9 +46,9 @@ class UserController extends Controller
                 $validated = $request->validated();
                 $user->name = $validated['name'] ? $validated['name'] : $user->name;
                 $user->email = $validated['email'] ? $validated['email'] : $user->email;
-                $user->password = $validated['password'] ? $validated['password'] : $user->password;
-                $user->phone = $validated['phone'] ? $validated['phone'] : $user->phone;
-                $user->mobile = $validated['mobile'] ? $validated['mobile'] : $user->mobile;
+                if ($validated['password']) {
+                    $user->password = $validated['password'];
+                }
                 $user->save();
                 DB::commit();
                 return response()->json(['message' => 'Datos actualizados correctamente'], 200);

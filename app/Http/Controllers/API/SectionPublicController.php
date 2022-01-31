@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\models\Noticia;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class SectionPublicController extends Controller
      */
     public function index () 
     {
-        $noticias = Noticia::paginate(15);
+        $noticias = Noticia::getNoticias()->paginate(20);
 
         return response()->json($noticias, 200);
     }
@@ -26,7 +27,7 @@ class SectionPublicController extends Controller
      */
     public function show ($id) 
     {
-        $noticia = Noticia::findOrDie($id);
+        $noticia = Noticia::getNoticia($id)->get();
 
         return response()->json($noticia, 200);
     }
@@ -38,9 +39,9 @@ class SectionPublicController extends Controller
      * seleccionada
      * @return response
      */
-    public function noticiasPorSeccion (Request $request) 
+    public function noticiasPorSeccion ($id) 
     {
-        $noticias = Noticia::getNoticiasSeccion($request->id)->get();
+        $noticias = Noticia::getNoticiasSeccion($id)->paginate(10);
 
         return response()->json($noticias, 200);
     }
@@ -51,9 +52,9 @@ class SectionPublicController extends Controller
      * seleccionado
      * @return response
      */
-    public function noticiasPorUsuario (Request $request) 
+    public function noticiasPorUsuario ($id) 
     {
-        $noticias = Noticia::getNoticiasUsuario($request->id)->get();
+        $noticias = Noticia::getNoticiasUsuario($id)->paginate(2);
 
         return response()->json($noticias, 200);
     }

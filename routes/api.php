@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', 'API\AuthController@register')->name('register');
 Route::post('login', 'API\AuthController@login')->name('login');
 Route::post('forgot', 'API\ForgotController@forgot')->name('forgot');
-Route::post('reset', 'API\ForgotController@reset')->name('reset');
+Route::put('reset', 'API\ForgotController@reset')->name('reset');
 
 /**
  * Rutas no protegidas noticias
@@ -35,9 +35,9 @@ Route::post('reset', 'API\ForgotController@reset')->name('reset');
  * 4. Noticia por id
  */
 Route::get('noticias/lista', 'API\SectionPublicController@index')->name('public-notices');
-Route::get('noticias/seccion/{seccion}', 'API\SectionPublicController@noticiasPorSeccion')->name('notices-section');
-Route::get('noticias/autor/{autor}', 'API\SectionPublicController@noticiasPorAutor')->name('notices-author');
-Route::get('noticia/{id}', 'API\SectionPublicController@noticiasPorAutor')->name('notices-author');
+Route::get('noticias/seccion/{id}', 'API\SectionPublicController@noticiasPorSeccion')->name('notices-section');
+Route::get('noticias/autor/{autor}', 'API\SectionPublicController@noticiasPorUsuario')->name('notices-author');
+Route::get('noticia/{id}', 'API\SectionPublicController@show')->name('notices-show');
 
 /**
  * Rutas protegidas
@@ -53,12 +53,14 @@ Route::middleware(['auth:api'])->group(function () {
      * 3. Primer acceso a la plataforma.
      * 4. Editar usuario.
      * 5. Salida de la plataforma
+     * 6. Un usuario en especifico con la lista de sus noticias
      */
     Route::get('users', 'API\UserController@index')->name('user-all');
     Route::get('user', 'API\AuthController@user')->name('user');
     Route::post('first-access-user', 'API\FirstAccessUserController@firstAccess')->name('first-access-user');
     Route::put('edit-user', 'API\UserController@update')->name('edit-user');
     Route::post('logout','API\AuthController@logout')->name('logout');
+    Route::get('user-news', 'API\AuthController@userWithNews')->name('user-news');
 
     /**
      * Rutas de las secciones
@@ -66,8 +68,19 @@ Route::middleware(['auth:api'])->group(function () {
      * por medio de un API
      */
     Route::resource('secciones', 'API\SeccionesController')->except([
-        'create', 'edit'
+        'create', 'edit', 'update'
     ]);
+    /**
+     * Laravel no acepta metodos put o patch para form-data por eso
+     * se considera dejar la ruta en de actualizacion en el metodo POST
+     */
+    Route::post('secciones/{id}', 'API\SeccionesController@update')->name('update-seccion');
+
+    /**
+     * obtiene todos las secciones con el scope
+     * de pluck (campos id y nombre)
+     */
+    Route::get('secciones-select', 'API\SeccionesController@pluckedData')->name('update-seccion');
     
     /**
      * Rutas de noticias
@@ -75,7 +88,12 @@ Route::middleware(['auth:api'])->group(function () {
      * por medio de un API
      */
     Route::resource('noticias', 'API\NoticiasController')->except([
-        'create', 'edit'
+        'create', 'edit', 'update'
     ]);
+    /**
+     * Laravel no acepta metodos put o patch para form-data por eso
+     * se considera dejar la ruta en de actualizacion en el metodo POST
+     */
+    Route::post('noticias/{id}', 'API\NoticiasController@update')->name('update-seccion');
 
 });

@@ -14,11 +14,11 @@ class CreateForeignKeysTable extends Migration
     public function up()
     {
         Schema::table('noticias', function (Blueprint $table) {
-            $table->foreign('id_usuario')->references('id')->on('id_usuario');
+            $table->foreign('id_usuario')->references('id')->on('users')->onDelete('cascade');;
         });
 
         Schema::table('noticias', function (Blueprint $table) {
-            $table->foreign('id_seccion')->references('id')->on('secciones');
+            $table->foreign('id_seccion')->references('id')->on('secciones')->onDelete('cascade');;
         });
     }
 

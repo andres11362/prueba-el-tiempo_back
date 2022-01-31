@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\HeaderTables;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\auth\RegisterRequest;
 use App\Http\Requests\auth\LoginRequest;
@@ -28,12 +29,12 @@ class AuthController extends Controller
             $pwd = $this->generateRandomPassword();
             $validated['password'] = $pwd;
             $user = User::create($validated);
-            $accessToken = $user->createToken('authToken')->accessToken;
+            $user->createToken('authToken')->accessToken;
             $data = $this->getEmailData($user, $pwd);
             Mail::to($request->email)->send(new RegisterUser($data));
             DB::commit();
-            return response()->json([ 'user' => $user, 'access_token' => $accessToken, 'registro' => 'OK'], 200);
-        }   catch (\Exception $e) {
+            return response()->json(['estado' => 'OK', 'message' => '¡Usuario creado correctamente!'], 200);
+        } catch (\Exception $e) {
             DB::rollback();
             return response(['message' => $e->getMessage()]);
         }
@@ -46,7 +47,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        if(!$request->has('errors')) {
+        if (!$request->has('errors')) {
             try {
                 if (!auth()->attempt($request->validated())) {
                     return response()->json(['error' => 1, 'message' => 'Credenciales invalidas'], 401);
@@ -69,11 +70,11 @@ class AuthController extends Controller
     public function logout()
     {
         $user = auth()->user();
-        $user->tokens->each(function($token, $key) {
+        $user->tokens->each(function ($token, $key) {
             $token->delete();
         });
         $user->save();
-        return response()->json('Sesion cerrada correctamente', 200);
+        return response()->json(['estado' => 'logout', 'message' => 'Sesion cerrada correctamente'], 200);
     }
 
     /**
@@ -87,11 +88,35 @@ class AuthController extends Controller
     }
 
     /**
+     * Retorna el usuario autenticado
+     * 
+     * @return user
+     */
+    public function userWithNews()
+    {
+        try {
+            $id = Auth::user()->id;
+
+            $user = User::findOrFail($id);
+
+            $news = $user->noticias()->paginate(10);
+
+            $headers = new HeaderTables('noticias');
+
+            $list_header = $headers->getTableColumns();
+
+            return response()->json(['headers' => $list_header, 'user' => $user, 'news' => $news], 200);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 500);
+        }
+    }
+
+    /**
      * Procesa y devuelve un objeto con los datos del usuario para enviar un correo
      * 
      * @return object
      */
-    private function getEmailData($user, $pwd) 
+    private function getEmailData($user, $pwd)
     {
         $data = new stdClass;
         $data->user = $user->email;

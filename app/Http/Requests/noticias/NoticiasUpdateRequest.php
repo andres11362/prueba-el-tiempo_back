@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\secciones;
+namespace App\Http\Requests\noticias;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SeccionesRequest extends FormRequest
+class NoticiasUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,14 @@ class SeccionesRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre' => 'required',
-            'imagen' => 'required|max:10000|mimes:jpeg,png'
+            'titulo' => 'nullable',
+            'contenido' => 'nullable',
+            'imagen' => 'max:10000|mimes:jpeg,png',
+            'id_seccion' => 'exists:secciones,id'
         ];
     }
 
+    
     /**
      * Retorna una respuesta según los errores 
      * de validación correspondientes
@@ -39,6 +42,4 @@ class SeccionesRequest extends FormRequest
     {
         return response()->json($errors, 422);
     }
-
-    
 }

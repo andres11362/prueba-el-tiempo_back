@@ -30,9 +30,7 @@ class UserRequest extends FormRequest
         return [
             'name' => 'required|max:55',
             'email' => 'email|unique:users,email,'.$user->id,
-            'password' => 'required|confirmed',
-            'phone' => 'required|max:10',
-            'mobile' => 'required|max:15',
+            'password' => 'confirmed'
         ];
     }
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\secciones;
+namespace App\Http\Requests\FirstAccess;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SeccionesRequest extends FormRequest
+class AccessRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class SeccionesRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre' => 'required',
-            'imagen' => 'required|max:10000|mimes:jpeg,png'
+            'password' => 'required|confirmed'
         ];
     }
 
@@ -39,6 +38,4 @@ class SeccionesRequest extends FormRequest
     {
         return response()->json($errors, 422);
     }
-
-    
 }
