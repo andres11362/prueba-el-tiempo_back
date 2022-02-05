@@ -3,7 +3,7 @@
 
 Por favor ve al siguiente enlace para actualizar tu contraseña.
 
-@component('mail::button', ['url' => 'http://localhost:3000/recovery/'. $token ])
+@component('mail::button', ['url' => 'http://localhost:3001/recovery/'. $token ])
 Enlace
 @endcomponent
 
