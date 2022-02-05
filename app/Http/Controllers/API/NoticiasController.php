@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Noticias\NoticiasRequest;
 use App\Http\Requests\noticias\NoticiasUpdateRequest;
 use App\models\Noticia;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use stdClass;

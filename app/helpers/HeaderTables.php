@@ -41,7 +41,7 @@ class HeaderTables {
     public function getTableColumns()
     {
         $temp_headers = Schema::getColumnListing($this->table);
-;
+        
         $filter = array_diff($temp_headers, $this->black_list);
 
         if($this->table !== 'users') {
